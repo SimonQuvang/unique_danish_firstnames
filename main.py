@@ -16,7 +16,6 @@ import requests
 @dataclass
 class Firstname:
     name: str
-    sex: str
     amount: int
 
 
@@ -36,14 +35,32 @@ def get_firstname_usage(name):
     response = requests.request("POST", url, headers=headers, data=payload)
     html = BeautifulSoup(response.text, features="html.parser")
     tr = html.select('tbody tr')
-    amount = 0
+    amount_total = 0
+
+    # selects the 1st tr which are men with the name, and then the 3rd td which is the number for 2021.
+    amount_1st = int(tr[0].select('td')[2].text.replace('.', ''))
+    amount_total = amount_total + amount_1st
+
     if tr[1]:
-        # selects 
-        td = tr[1].select('td')[2].text
-        #amount = amount + int(tr[1].select('td')[2].text)
-        print(tr[1].select('td')[2].text)
+        # selects the 2nd tr which are women with the name, and then the 3rd td which is the number for 2021.
+        amount_2nd = int(tr[1].select('td')[2].text.replace('.', ''))
+        amount_total = amount_total + amount_2nd
+
+    # creates an object using dataclasses to return
+    first_name = Firstname(name=name, amount=amount_total)
+    return first_name
+
+
+def load_xls_data():
+    # Load the files, read row by row, and call the get first_name_usage function. Add the dataclass to an list, return list
+
+def main(name):
+    list_of_names_objects = [get_firstname_usage(name)]
+
+    # write a function to read the xls files and loop through all the names.
+    print(list_of_names_objects)
 
 
 
 if __name__ == '__main__':
-    get_firstname_usage('Simon')
+    main('Simon')
