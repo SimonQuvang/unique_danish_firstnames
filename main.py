@@ -34,11 +34,11 @@ def save_to_csv(first_name):
         writer = csv.writer(file)
         # write a row to the csv file
         writer.writerow(first_name.get_as_row())
-    time.sleep(4)
+    #time.sleep(4)
 
 
 def get_firstname_usage(name):
-    time.sleep(1)
+    #time.sleep(1)
     url = "https://www.dst.dk/da/Statistik/emner/borgere/navne/HvorMange?ajax=1"
     payload = f'firstName={name}&lastName='
     headers = {
