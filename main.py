@@ -29,7 +29,7 @@ class Firstname:
 
 def save_to_csv(first_name):
     print(first_name)
-    with open('names_count.csv', 'a+', newline='', encoding='UTF-8') as file:
+    with open('names_count2.csv', 'a+', newline='', encoding='UTF-8') as file:
         # create the csv writer
         writer = csv.writer(file)
         # write a row to the csv file
@@ -52,6 +52,7 @@ def get_firstname_usage(name):
     }
     print(f'{name=}')
     response = requests.request("POST", url, headers=headers, data=payload)
+
     html = BeautifulSoup(response.text, features="html.parser")
     tr = html.select('tbody tr')
     amount_2020_total = 0
@@ -82,7 +83,6 @@ def main():
 
     df.apply(lambda x: get_firstname_usage(x['Name']), axis=1)
 
-    # write a function to read the xls files and loop through all the names.
 
 
 if __name__ == '__main__':
