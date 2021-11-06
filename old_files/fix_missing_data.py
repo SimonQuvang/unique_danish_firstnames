@@ -1,7 +1,6 @@
 import urllib.parse
 import pandas as pd
 import requests
-from main import Firstname, save_to_csv
 import numpy as np
 
 
@@ -26,10 +25,6 @@ def get_data(name):
     list_of_dfs = pd.read_html(response.text,  decimal=',', thousands='.')
     df = list_of_dfs[0]
 
-    first_name = Firstname(name=name, amount_2020=df['2020'].sum(), amount_2021=df['2021'].sum())
-
-    save_to_csv(first_name)
-
 
 def load_df_and_find_missing_values():
     # load dataframe from csv
@@ -41,13 +36,19 @@ def load_df_and_find_missing_values():
     new_df.apply(lambda x: get_data(x['Name']), axis=1)
 
 
+def load_df():
+    df = pd.read_csv("names_count.csv")
+    df2 = pd.read_csv("../names_count3.csv")
+    new_df = df.loc[(df['2020'] != 0) & (df['2021'] != 0)]
+    # print dataframe
+    merged_df = pd.merge(df2, new_df, how='outer')
+    print(merged_df)
+    merged_df.to_csv('name_count_final.csv', index=False)
+
+
 def main():
-    df = pd.read_csv("names_count2.csv")
-    print(df)
-    df['2020'] = df['2020'].apply(np.int64)
-    df['2021'] = df['2021'].apply(np.int64)
-    df.to_csv('names_count3.csv', index=False)
-    print(df)
+    load_df()
+
 
 if __name__ == '__main__':
     main()
